@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+<meta charset="UTF-8" />
+<title>הורדת קבצים</title>
+</head>
+<body>
+
+<button id="downloadAllBtn">הורד את כל הקבצים</button>
+
+<script>
+    const files = {
+        "background.js": `// תוכן background.js\nconsole.log("background");`,
+        "content.js": `// תוכן content.js\nconsole.log("content");`,
+        "manifest.json": `{
+  "manifest_version": 3,
+  "name": "שבתקייה",
+  "version": "1.0"
+}`,
+        "popup.html": `<html><body><h1>Popup</h1></body></html>`,
+        "popup.js": `// תוכן popup.js\nconsole.log("popup");`
+    };
+
+    function downloadFile(filename, content) {
+        const blob = new Blob([content], {type: "text/plain;charset=utf-8"});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    document.getElementById('downloadAllBtn').addEventListener('click', () => {
+        for (const [filename, content] of Object.entries(files)) {
+            downloadFile(filename, content);
+        }
+    });
+</script>
+
+</body>
+</html>
